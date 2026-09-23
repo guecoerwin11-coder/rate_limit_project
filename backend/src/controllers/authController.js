@@ -2,7 +2,7 @@ const prisma = require('../configs/postgres')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const crypto = require("crypto")
-const {accessToken, freshToken} = require('../controllers/tokens')
+const {accessToken, freshToken} = require('../controllers/tokens/tokens')
 const {
     BadRequestError, NotFoundError, ForbiddenError, UnauthorizedError, internalServerError
 } = require('../utils/classError')

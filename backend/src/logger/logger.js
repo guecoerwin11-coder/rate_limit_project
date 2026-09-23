@@ -1,7 +1,7 @@
 const winston = require("winston")
 const path = require('path')
 
-const logFolder = path.joini(__dirname, '../../logs');
+const logFolder = path.join(__dirname, '../../logs');
 
 const logger = winston.createLogger({
     level: 'info',
