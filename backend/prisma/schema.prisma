@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role{
+  admin
+  customer
+  staff
+}
+
+model User{
+  id String @id @default(uuid())
+  fullName String @map("full_name")
+  email String @unique
+  password String
+  role Role @default(customer)
+  createdAt DateTime @default(now())
+
+  passwordToken String?
+  resetToken DateTime?
+
+  rentals Rent[]
+  transactions Transaction[]
+}
+
+enum Status{
+  active
+  expired
+  pending
+}
+model Rent{
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  name String
+  description String
+  prize Float
+  status Status @default(pending)
+  startedAt DateTime @map("started_at")
+  expiredAt DateTime @map("expired_at")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  
+}
+
+model Transaction{
+  id String @id @default(uuid())
+  amount Float
+  status TransactionStatus @default(pending)
+  reference String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @map("user_id")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  rentId String @map("rent_id")
+  ren Rent @relation(references: [id], fields: [rentId], onDelete: Cascade)
+
+}
+
+enum TransactionStatus{
+  success
+  failed
+  pending
+  cancel
+}
